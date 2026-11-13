@@ -34,6 +34,34 @@ const registerUser = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ correo: email });
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    if (user.contrasena !== password) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+
+    res.status(200).json({
+      message: 'Inicio de sesión exitoso',
+      user: {
+        id: user._id,
+        nombre: user.nombre,
+        correo: user.correo,
+        fidelidadPuntos: user.fidelidadPuntos,
+        direccionEnvio: user.direccionEnvio
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Error interno del servidor', detalle: error.message });
+  }
+};
+
 module.exports = {
-  registerUser
+  registerUser,
+  loginUser
 };
