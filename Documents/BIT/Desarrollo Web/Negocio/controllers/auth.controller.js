@@ -43,7 +43,7 @@ const loginUser = async (req, res) => {
     }
 
     if (user.contrasena !== password) {
-      return res.status(401).json({ error: 'Contraseña incorrecta' });
+      return res.status(400).json({ error: 'Contraseña incorrecta' });
     }
 
     res.status(200).json({
